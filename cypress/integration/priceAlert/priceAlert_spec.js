@@ -15,7 +15,7 @@ const recipeSetupPage = require("../../page_objects/recipeSetup.page");
 const priceAlertPageObj = require("../../page_objects/priceAlert.page");
 const headerPageObj = require("../../page_objects/header.pageObj");
 
-const urlToHit = "https://me-13007.marginedge.com/#/";
+const urlToHit = "https://me-15246.marginedge.com/#/";
 
 console.log("Running against: " + urlToHit);
 
@@ -71,7 +71,7 @@ describe('Price Alert', () => {
         console.log("here4");
 
     });
-   it.only("Place New Order", () => {
+   it("Place New Order", () => {
         loginPageObjs.loginAs(creds.adminName, creds.password);
         console.log("here22");
         hamburgerMenuPageObj.goToOrders();
@@ -82,9 +82,7 @@ describe('Price Alert', () => {
         console.log("here243");
         orderPage.initialReview();
         console.log("here253");
-        orderPage.reconcialltionProcess();
-        console.log("here2573");
-
+        //orderPage.reconcialltionProcess();
 
     });
     

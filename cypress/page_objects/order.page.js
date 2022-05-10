@@ -67,7 +67,6 @@ class orderPage {
         confirmVendor:()=>cy.xpath(`//div[@id='ui-select-choices-row-0-0']`),
         searchVendorItemRec:()=>cy.xpath(`//*[@placeholder='Enter at least 2 characters to search for an item code or item name...']`),
         searchOrder:()=>cy.xpath(`//input[@placeholder='Search']`),
-        selectRecItem:() =>cy.xpath(`//div[contains(text(),'Price Alert Invoice')]`),
     };
 
     closeOrder() {
@@ -250,7 +249,7 @@ class orderPage {
     reconcialltionProcess(){
         cy.wait(3000);
         this.element.searchOrder().type(`Price Alert Invoice`);
-        //this.element.selectRecItem().click();
+        this.element.selectRecItem().click();
         //this.element.selectOrderItem().click();
         /* this.element.selectVendor().click();
         console.log(`This is the 11`);
