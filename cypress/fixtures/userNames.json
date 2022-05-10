@@ -1,0 +1,20 @@
+{
+    "developerUN": "developer",
+    "adminUN": "admin",
+    "accountManagerUN": "accountmanager",
+    "managinganalystUN": "managinganalyst",
+    "leadanalystUN": "leadanalyst",
+    "analystUN": "analyst",
+    "clientServiceUN": "clientService",
+    "userUN": "user",
+    "managerUN": "manager",
+    "accountantUN": "accountant",
+    "unitadminUN": "unitadmin",
+    "marginedgeAdminUN": "marginedgeadmin",
+    "souschefUN": "souschef",
+    "payrollManagerUN": "payrollmanager",
+    "billpayuserUN": "billpayuser",
+    "assAccUN": "associateaccountant",
+    "franchiseAccUN": "franchiseaccountant",
+    "shiftRevieweUN": "shiftreviewer"
+}
