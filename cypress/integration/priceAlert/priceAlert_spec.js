@@ -68,6 +68,7 @@ describe('Price Alert', () => {
         cy.wait(4000);
         priceAlertPageObj.deletePriceAlert();
         console.log("here4");
+        console.log("here4");
 
     });
    it("Place New Order", () => {
