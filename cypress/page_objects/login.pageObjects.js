@@ -32,13 +32,15 @@ class loginPage {
     }
 
     verifyLoginPageElement() {
-        cy.wait(10000);
+        cy.wait(1000);
         this.element.marginedgeLogo().should("be.visible");
         this.element.userNameInput().should("be.visible");
         this.element.passwordInput().should("be.visible");
         this.element.signInText().should("be.visible");
         this.element.loginText().should("be.visible");
         this.element.forgetPasswordLink().should("be.visible");
+        cy.wait(1000);
+
     }
 
     loginAs(username, password) {

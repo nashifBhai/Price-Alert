@@ -71,7 +71,7 @@ describe('Price Alert', () => {
         console.log("here4");
 
     });
-   it("Place New Order", () => {
+   it.only("Place New Order", () => {
         loginPageObjs.loginAs(creds.adminName, creds.password);
         console.log("here22");
         hamburgerMenuPageObj.goToOrders();
@@ -80,10 +80,10 @@ describe('Price Alert', () => {
         cy.wait(1000);
         orderPage.endPreProcessing();
         console.log("here243");
-        orderPage.selectItemForInitialReview();
-        console.log("here2311");
-        orderPage.selectForInitialReview();
-        console.log("here23f11");
+        orderPage.initialReview();
+        console.log("here253");
+        orderPage.reconcialltionProcess();
+        console.log("here2573");
 
 
     });
