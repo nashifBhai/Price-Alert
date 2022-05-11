@@ -24,6 +24,11 @@ beforeEach(() => {
     cy.visit(urlToHit);
     loginPageObjs.verifyLoginPageElement();
     console.log("here1");
+    loginPageObjs.loginAs(usernames.adminUN, creds.password);
+    console.log("here1000");
+
+    cy.wait(10000);
+
 });
 
 afterEach(() => {
@@ -71,20 +76,51 @@ describe('Price Alert', () => {
         console.log("here4");
 
     });
-   it("Place New Order", () => {
-        loginPageObjs.loginAs(creds.adminName, creds.password);
+   it.only("Place New Order", () => {
+       
         console.log("here22");
         hamburgerMenuPageObj.goToOrders();
         console.log("here23");
+        orderPage.viewOrder();
         orderPage.attachInvoice();
         cy.wait(1000);
         orderPage.endPreProcessing();
         console.log("here243");
         orderPage.initialReview();
         console.log("here253");
-        //orderPage.reconcialltionProcess();
+        orderPage.reconcialltionProcess();
+        orderPage.finalReview();
 
     });
+    /* it("Order",()=>{
+        //Choose Tenant
+        console.log("tenant");
+        loginPageObjs.chooseTenant(testData.tenantName);
+        // go to order page
+        hamburgerMenuPageObj.goToOrders();
+        console.log("tenant2");
+        // view order
+        orderPage.viewOrder();
+        console.log("tenant3");
+        // view inbox
+        orderPage.viewInbox();
+        console.log("tenant4");
+        // send order
+        hamburgerMenuPageObj.goToPlaceOrders();
+        orderPage.placeOrder();
+        // change status to all
+        orderPage.changeStatusToSent();
+        // resend order
+        orderPage.resendOrder();
+        // delete order
+        orderPage.deleteOrderInv();
+        // save order
+        hamburgerMenuPageObj.goToPlaceOrders();
+        orderPage.saveOrder();
+        orderPage.changeStatusToSaved();
+        // delete saved order
+        orderPage.deleteOrderInv();
+    }); */
     
     
 });

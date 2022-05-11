@@ -16,6 +16,7 @@ class loginPage {
         budgetDashboardElem: () => cy.xpath(`//*[@ng-controller="BudgetOverviewController"]`),
         topPriceMoverDashboardElem: () => cy.xpath(`//*[@heading="Top Price Movers"]//div[@class="panel panel-primary"]`),
         salesDashboardElement: () => cy.xpath(`//panel[@class='ng-scope ng-isolate-scope']//div[@class='panel panel-green']`),
+        loginSplashHolder:() =>cy.xpath(`//div[@id='loginSplashHolder']`),
     };
 
     verifyHomePageForUser() {
@@ -39,6 +40,7 @@ class loginPage {
         this.element.signInText().should("be.visible");
         this.element.loginText().should("be.visible");
         this.element.forgetPasswordLink().should("be.visible");
+        this.element.loginSplashHolder().should(`be.visible`);
         cy.wait(2000);
 
     }

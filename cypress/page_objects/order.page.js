@@ -22,7 +22,7 @@ class orderPage {
         customerNameRecon: () => cy.get(`[ng-model="order.customerNum"]`),
         invoiceDateRecon: () => cy.xpath(`(//*[@name="invoiceDate"])[2]`),
         openDDRecon: () => cy.get(`[ng-change="handwrittenMarkupChanged()"]`).select('No'),
-        saveBtnRecon: () => cy.get(`[ng-click="reconcile($event)"]`),
+        saveBtnRecon: () => cy.xpath(`(//button[@type='submit'])[5]`),
         verifyBtn: () => cy.get(`[ng-click="verifyOrderAndClose()"]`),
         filterOption: () => cy.get(`[ng-model="filterValue"]`),
         clickLineItemBtn: () => cy.get(`[ng-click="addRow()"]`),
@@ -65,8 +65,22 @@ class orderPage {
         saveAndSkip: () => cy.get(`[ng-click="addNewQuestion($event)"]`),
         selectOrderItem:() =>cy.xpath(`(//div[@class='ui-grid-row ng-scope'])[1]`),
         confirmVendor:()=>cy.xpath(`//div[@id='ui-select-choices-row-0-0']`),
-        searchVendorItemRec:()=>cy.xpath(`//*[@placeholder='Enter at least 2 characters to search for an item code or item name...']`),
+        searchVendorItemRec:()=>cy.xpath(`//input[@placeholder='Enter at least 2 characters to search for an item code or item name...']`),
         searchOrder:()=>cy.xpath(`//input[@placeholder='Search']`),
+        selectRecItem:()=>cy.xpath(`//div[@class='ui-grid-row ng-scope']//*[contains(@class,'ui-grid-row-link ng-scope')]`),
+        vendorRec:()=>cy.xpath(`//span[@aria-label='Select a vendor activate']`),
+        vendorSelectRec:()=>cy.xpath(`//span[@class='ui-select-choices-row-inner']`),
+        recQuantity:()=>cy.xpath(`//input[@name='quantity']`),
+        recPrice:()=>cy.xpath(`//input[@name='unitPrice']`),
+        recOk:()=>cy.xpath(`//button[normalize-space()='Ok']`),
+        recPackagin:()=>cy.xpath(`(//input[@name='packagingSelection'])[1]`),
+        isRecCheck:()=>cy.xpath(`(//div[@class='icheckbox_minimal-blue'])[1]`),
+        recSave:()=>cy.xpath(`//*[@ng-click='reconcile($event)']`),
+        recVerify:()=>cy.xpath(`//button[@ng-click='verifyOrderAndClose()']`),
+        orderFinalSelection:()=>cy.xpath(`(//div[@class='ui-grid-row ng-scope'])[1]`),
+        finalReviewChekBox:()=>cy.xpath(`//span[normalize-space()='This order has been reviewed and should be closed.']`),
+        finalReviewCloseOrder:()=>cy.xpath(`//button[@ng-click='verifyOrderAndClose()']`),
+
     };
 
     closeOrder() {
@@ -248,11 +262,45 @@ class orderPage {
     }
     reconcialltionProcess(){
         cy.wait(3000);
-        this.element.searchOrder().type(`Price Alert Invoice`);
-        this.element.selectRecItem().click();
+        this.element.selectOrderItem().click();
+        cy.wait(3000);
+
+        //this.element.searchOrder().type(`Price Alert Invoice`);
+        //this.element.selectRecItem().click();
         //this.element.selectOrderItem().click();
-        /* this.element.selectVendor().click();
-        console.log(`This is the 11`);
+        this.element.vendorRec().type('Arrow');
+        this.element. vendorSelectRec().click();
+        this.element.invoiceNumberRecon().type(`Price Alert Invoice`);
+        this.element.invoiceDateRecon().click();
+        this.element.todayDate().click();
+        cy.xpath(`(//*[@class='checkbox-inline pull-right icheck-label'])[1]`).then(($body) => {
+            if ($body.text().includes('No address is provided')) {
+                cy.get(`#noInfoPresent`).click();
+                cy.get(`#noPhonePresent`).click();
+            }
+        });
+        console.log(`thisis21`);
+        //Line Item
+        this.element.clickLineItemBtn().click();
+        cy.wait(3000);
+        this.element.searchVendorItemRec().type(`Kraft Shopper`);
+        this.element.vendorSelectRec().click();
+        this.element.recQuantity().type(`1`);
+        this.element.recPrice().type(`150`);
+        this.element.recOk().click();
+        this.element.recPackagin().click();
+        this.element.saveBtnRecon().click();
+        console.log(`this is for the rec 11`)
+        this.element.openDDRecon();
+        this.element.isRecCheck().click();
+        this.element.recSave().click();
+        this.element.recVerify().click();
+        /* this.element.searchVendorItemRec().type(`Kraft Shopper`).then(($body)=> {
+        if($body.text().includes('10X5.5X13.25 KRAFT SHOPPER 250')){
+        cy.get(`//div[@id='ui-select-choices-row-12-0']//*[.='10X5.5X13.25 KRAFT SHOPPER 250']`).click();
+        }
+        }); */
+        /* console.log(`This is the 11`);
 
         this.element.enterVendorName().type(`Arrow`);
         this.element.confirmVendor().click();
@@ -285,6 +333,13 @@ class orderPage {
         console.log(`Rec Complete Done`); */
 
 
+    }
+    finalReview()
+    {
+        cy.wait(3000);
+        this.element.orderFinalSelection().click();
+        this.element.finalReviewChekBox().click();
+        this.element.finalReviewCloseOrder().click();
     }
 
     placeNewOrder(vendor) {
