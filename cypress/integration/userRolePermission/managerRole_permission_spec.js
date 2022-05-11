@@ -12,10 +12,15 @@ const vendorItemPage = require("../../page_objects/vendorItems.page");
 const productPage = require("../../page_objects/product.page");
 const menutemPage = require("../../page_objects/menutem.page");
 const recipeSetupPage = require("../../page_objects/recipeSetup.page");
+const inventoriesRolePage = require("../../page_objects/inventoriesRole.page");
 
-const urlToHit = "https://master.marginedge.com/#/";
 
+const urlToHit = process.env.npm_config_url || "http://localhost:8080/";
 console.log("Running against: " + urlToHit);
+
+Cypress.on('uncaught:exception', (err, runnable) => {
+    return false;
+});
 
 beforeEach(() => {
     // open the application and verify elements from Login page
@@ -36,7 +41,7 @@ describe('Role Permission Verification for Manager', () => {
         // make "Wasabi Tysons" as tenant to get feature  from Key visible
         loginPageObjects.chooseTenant(testData.tenantName);
         // check Nightly Sales data checkbox
-        setupPageObjs.enableFlagForSales();
+        setupPageObjs.enableFlagForSalesAndCustomReports();
         // logout from admin
         loginPageObjs.logout();
         // login as manager
@@ -179,4 +184,71 @@ describe('Role Permission Verification for Manager', () => {
         assertionPage.verifyKitchenDisplayPage();
         recipeSetupPage.goToOpenDisplayKitchenApplicationPage();
     });
+
+    it("Check Inventory Page", () => {
+        // login as manager
+        loginPageObjs.loginAs(usernames.managerUN, creds.password);
+        // check inventory summary
+        hamburgerMenuPageObj.goToInventoriesSummary();
+        // check content on summary page
+        assertionPage.checkContentDisplayed();
+        // check for post to accounting-not visible
+        hamburgerMenuPageObj.checkForPostToAccounting();
+        // go to inventories
+        hamburgerMenuPageObj.goToInventoriesChild();
+        // create Count Sheet and check for close/delete/reopen
+        inventoriesRolePage.createAndCloseCountRole();
+        hamburgerMenuPageObj.goToInventoriesChild();
+        // reopen Inventories
+        inventoriesRolePage.reOpenInventories();
+        // deleye inventories
+        inventoriesRolePage.deleteInventories();
+        // check count sheet and product
+        hamburgerMenuPageObj.goToCountSheetChild();
+        inventoriesRolePage.importAndPrintCountSheet();
+        // check product
+        hamburgerMenuPageObj.goToProductInventoryChild();
+    });
+
+    it("Check Labour Page", () => {
+        // login as manager
+        loginPageObjs.loginAs(usernames.managerUN, creds.password);
+        hamburgerMenuPageObj.checkLaborMenu();
+    });
+
+    it("Check Bill Pay Pages", () => {
+        // login as manager
+        loginPageObjs.loginAs(usernames.managerUN, creds.password);
+        hamburgerMenuPageObj.checkBillPayMenu();
+    });
+
+    it("Check Accounting Pages", () => {
+        // login as manager
+        loginPageObjs.loginAs(usernames.managerUN, creds.password);
+        hamburgerMenuPageObj.goToCategoriesChild();
+        assertionPage.checkContentDisplayed();
+    });
+
+    it("Check Setup Pages", () => {
+        loginPageObjs.loginAs(usernames.managerUN, creds.password);
+        hamburgerMenuPageObj.goToSetup();
+        hamburgerMenuPageObj.checkSetupBilling();
+        // go to users and veify
+        hamburgerMenuPageObj.goToSetupUsers();
+        assertionPage.checkContentDisplayed();
+        // go to integration and veify
+        hamburgerMenuPageObj.goToSetupIntegration();
+        assertionPage.checkContentDisplayed();
+        // go to POS and veify
+        hamburgerMenuPageObj.goToSetupPOS();
+        assertionPage.checkContentDisplayed();
+        hamburgerMenuPageObj.checkSetupUsageReport();
+        // go to upload reports and veify
+        hamburgerMenuPageObj.goToSetupUploadReports();
+        assertionPage.checkContentDisplayed();
+        // go to setup verification and veify
+        hamburgerMenuPageObj.goToSetupVerification();
+        assertionPage.checkContentDisplayed();
+        hamburgerMenuPageObj.checkSetupNotification();
+    })
 });

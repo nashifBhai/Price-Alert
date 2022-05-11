@@ -5,7 +5,6 @@ const utilObj = require("../../utils/util");
 const hamburgerMenuPageObj = require("../../page_objects/hamburgerMenu.pageObj");
 const vendorPageObj = require("../../page_objects/vendors.page");
 const conceptPageObj = require("../../page_objects/concept.page");
-const companyPageObj = require("../../page_objects/companies.page");
 const restaurantPageObj = require("../../page_objects/restaurant.page");
 const categoryPageObj = require("../../page_objects/categories.page");
 const productPageObj = require("../../page_objects/product.page");
@@ -24,9 +23,7 @@ const exportPage = require("../../page_objects/export.page");
 
 let timeStamp = new Date().toISOString();
 //creating global variable for test
-let createCompanyName = sanityTestData.companyName + timeStamp;
 let createConceptName = sanityTestData.conceptName + timeStamp;
-let createZenDeskID = sanityTestData.zendeskID + timeStamp;
 export const createRestName = sanityTestData.restaurant + timeStamp;
 let createVendorName = sanityTestData.vendorName + timeStamp;
 export const countSheetName = sanityTestData.CountSheetName + utilObj.makeid();
@@ -67,8 +64,6 @@ afterEach(() => {
 
 describe("Sanity Spec", () => {
     it("Pre-SignIn Verification, Login As Admin", () => {
-        //cy.visit(urlToHit);
-        //loginPageObjs.verifyLoginPageElement();
         loginPageObjs.loginAs(creds.adminName, creds.password);
     });
 
@@ -80,15 +75,10 @@ describe("Sanity Spec", () => {
         conceptPageObj.createConcept(createConceptName);
         conceptPageObj.element.searchBtn().type(createConceptName);
         conceptPageObj.element.assertionList().should("be.visible");
-        //goTo Company Page
-        hamburgerMenuPageObj.goToCompanies();
-        //create Company
-        companyPageObj.createCompany(createCompanyName, createZenDeskID);
-        conceptPageObj.element.searchBtn().type(createCompanyName).should("be.visible");
         //go to restaurant
         hamburgerMenuPageObj.goToRestaurant();
         //create restaurant
-        restaurantPageObj.createRestaurant(createConceptName, createCompanyName, createRestName, emailID, loginID, firstName, lastName);
+        restaurantPageObj.createRestaurant(createConceptName, "Wasabi Sushi Co", createRestName, emailID, loginID, firstName, lastName);
         //logout
         loginPageObjs.logout();
         //login and select the tenant

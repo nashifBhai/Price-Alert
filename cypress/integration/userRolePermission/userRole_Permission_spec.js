@@ -29,44 +29,15 @@ beforeEach(() => {
     loginPageObjs.loginAs(usernames.userUN, creds.password);
 });
 
+afterEach(() => {
+    // logout from application
+    loginPageObjs.logout();
+});
+
 describe("Role Permission Verification for User", () => {
     it("Check Home Page", () => {
         // check for tabs on home page
         loginPageObjs.verifyHomePageForUser();
-    });
-
-    it("Check Order Page", () => {
-        // go to order page
-        hamburgerMenuPageObj.goToOrders();
-        // view order
-        orderPage.viewOrder();
-        // check approve invoice
-        orderPage.checkApproveInvoiceTab();
-        // check edit access
-        orderPage.checkForEdit();
-        // place order
-        hamburgerMenuPageObj.goToPlaceOrders();
-        orderPage.placeOrder();
-        // change status to all
-        orderPage.changeStatusToSent();
-        // resend order
-        orderPage.resendOrder();
-        // delete order
-        orderPage.deleteOrderInv();
-        //  attach and upload invoice
-        orderPage.attachInvoice();
-        // save order
-        hamburgerMenuPageObj.goToPlaceOrders();
-        orderPage.saveOrder();
-        // delete saved order
-        orderPage.changeStatusToSaved();
-        orderPage.deleteOrderInv();
-        // No access to delete closed order
-        orderPage.changeStatusToClosed();
-        orderPage.deleteOrderCheck();
-        // goToSetupTranfer
-        hamburgerMenuPageObj.goToOrderSetup();
-        orderPage.checkInitailTransfer();
     });
 
     it("Check Performance Page", () => {
