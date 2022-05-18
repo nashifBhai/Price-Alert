@@ -76,10 +76,22 @@ class orderPage {
         recPackagin:()=>cy.xpath(`(//input[@name='packagingSelection'])[1]`),
         isRecCheck:()=>cy.xpath(`(//div[@class='icheckbox_minimal-blue'])[1]`),
         recSave:()=>cy.xpath(`//*[@ng-click='reconcile($event)']`),
-        recVerify:()=>cy.xpath(`//button[@ng-click='verifyOrderAndClose()']`),
+        recVerify:()=>cy.get(`[ng-click="verifyOrderAndClose()"] > .glyphicon`),
         orderFinalSelection:()=>cy.xpath(`(//div[@class='ui-grid-row ng-scope'])[1]`),
         finalReviewChekBox:()=>cy.xpath(`//span[normalize-space()='This order has been reviewed and should be closed.']`),
-        finalReviewCloseOrder:()=>cy.xpath(`//button[@ng-click='verifyOrderAndClose()']`),
+        finalReviewCloseOrder:()=>cy.xpath(`//button[@ng-click='reconcile($event)']`),
+        finalReviewCompleted:()=>cy.xpath(`//button[@ng-click='verifyOrderAndClose()']//button[@ng-click='verifyOrderAndClose()']`),
+        searchOrderFinalReview:()=>cy.xpath(`//input[@placeholder='Search']`),
+        selectFinalReviewOrder:()=>cy.xpath(`//a[@class='ui-grid-row-link ng-scope']//div[contains(text(),'PO 1')]`),
+        checkCloseOrderFinalReview:()=>cy.xpath(`//div[@ng-show="order.status!=='CLOSED' && !hasActiveConcern() && !hasActiveAMConcern() && !requiresEdiImage() && !posOnlyClient"]`),
+        saveBtnFR:()=>cy.xpath(`//button[@ng-click='reconcile($event)']`),
+        verifyBtnFR:()=>cy.xpath(`//button[@ng-click='verifyOrderAndClose()']`),
+        inVoiceNumberClosedOrder:()=>cy.xpath(`//input[@name='invoiceNum']`),
+        deleteInvoice:()=>cy.xpath(`//button[@ng-click='delete()']`),
+        selectFinalReviewOrder2:()=>cy.xpath(`//a[@class='ui-grid-row-link ng-scope']//a[@class='ui-grid-row-link ng-scope']`),
+        orderDeleteReason:()=>cy.xpath(`//label[normalize-space()='The customer asked me to.']`),
+        orderDeleteReasonText:()=>cy.get('.ng-invalid.ng-dirty > .modal-body > [ng-if="isInStaffRole()"] > .form-control'),
+        orderDelete:()=>cy.get('.modal-footer > .btn-danger > .ng-scope'),
 
     };
 
@@ -234,29 +246,29 @@ class orderPage {
     }
     initialReview(){
         cy.wait(3000);
-        this.element.selectOrderItem().click();
-        this.element.selectVendor().click();
+        this.element.selectOrderItem().should(`be.visible`).click();
+        this.element.selectVendor().should(`be.visible`).click();
         console.log(`This is the 1`);
 
-        this.element.enterVendorName().type(`Arrow`);
-        this.element.confirmVendor().click();
-        this.element.invoiceNumber().type(`Price Alert Invoice`);
+        this.element.enterVendorName().should(`be.visible`).type(`Arrow`);
+        this.element.confirmVendor().should(`be.visible`).click();
+        this.element.invoiceNumber().should(`be.visible`).type(`POC Invoice 1`);
         console.log(`thisia1`);
-        this.element.invoiceDate().click();
-        this.element.todayDate().click();
-        this.element.verifiedTotal().type("300");
+        this.element.invoiceDate().should(`be.visible`).click();
+        this.element.todayDate().should(`be.visible`).click();
+        this.element.verifiedTotal().should(`be.visible`).type(`300`);
         console.log(`thisia11`);
-        cy.xpath(`(//*[@class='checkbox-inline pull-right icheck-label'])[1]`).then(($body) => {
+        /* cy.xpath(`(//*[@class='checkbox-inline pull-right icheck-label'])[1]`).then(($body) => {
                     if ($body.text().includes('No address is provided')) {
                         cy.get(`#noInfoPresent`).click();
                         cy.get(`#noPhonePresent`).click();
                     }
-                });
+                }); */
         console.log(`thisis2`);
         this.element.openDD();
-        this.element.initialReviewCompleteCheck().click();
+        this.element.initialReviewCompleteCheck().should(`be.visible`).click();
         console.log(`thisis3`);
-        this.element.IRSaveBtn().click();
+        this.element.IRSaveBtn().should(`be.visible`).click();
         console.log(`IR Complete`);
 
     }
@@ -269,23 +281,24 @@ class orderPage {
         //this.element.selectRecItem().click();
         //this.element.selectOrderItem().click();
         this.element.vendorRec().type('Arrow');
+        cy.wait(1000);
         this.element. vendorSelectRec().click();
-        this.element.invoiceNumberRecon().type(`Price Alert Invoice`);
+        this.element.invoiceNumberRecon().type(`PO 1`);
         this.element.invoiceDateRecon().click();
         this.element.todayDate().click();
-        cy.xpath(`(//*[@class='checkbox-inline pull-right icheck-label'])[1]`).then(($body) => {
+        /* cy.xpath(`(//*[@class='checkbox-inline pull-right icheck-label'])[1]`).then(($body) => {
             if ($body.text().includes('No address is provided')) {
                 cy.get(`#noInfoPresent`).click();
                 cy.get(`#noPhonePresent`).click();
             }
-        });
+        }); */
         console.log(`thisis21`);
         //Line Item
         this.element.clickLineItemBtn().click();
         cy.wait(3000);
         this.element.searchVendorItemRec().type(`Kraft Shopper`);
         this.element.vendorSelectRec().click();
-        this.element.recQuantity().type(`1`);
+        this.element.recQuantity().should(`be.visible`).type(`1`);
         this.element.recPrice().type(`150`);
         this.element.recOk().click();
         this.element.recPackagin().click();
@@ -295,6 +308,7 @@ class orderPage {
         this.element.isRecCheck().click();
         this.element.recSave().click();
         this.element.recVerify().click();
+        cy.wait(1000);
         /* this.element.searchVendorItemRec().type(`Kraft Shopper`).then(($body)=> {
         if($body.text().includes('10X5.5X13.25 KRAFT SHOPPER 250')){
         cy.get(`//div[@id='ui-select-choices-row-12-0']//*[.='10X5.5X13.25 KRAFT SHOPPER 250']`).click();
@@ -334,12 +348,68 @@ class orderPage {
 
 
     }
-    finalReview()
-    {
+    finalReviewProcessOrder(){
         cy.wait(3000);
-        this.element.orderFinalSelection().click();
-        this.element.finalReviewChekBox().click();
-        this.element.finalReviewCloseOrder().click();
+        this.element.searchOrderFinalReview().type('PO 1');
+        cy.wait(3000);
+        this.element.selectFinalReviewOrder().click();
+        cy.wait(3000);
+        console.log(`1000`);
+        this.element.checkCloseOrderFinalReview().click();
+        cy.wait(1000);
+        console.log(`1001`);
+        this.element.saveBtnFR().click();
+        cy.wait(1000);
+        console.log(`1002`);
+        this.element.verifyBtnFR().click();
+        console.log(`1003`);
+        cy.wait(5000);
+        this.element.searchOrderFinalReview().clear();
+        cy.wait(3000);
+        this.element.searchOrderFinalReview().type('PO 1');
+        cy.wait(3000);
+        this.element.selectFinalReviewOrder().click();
+        console.log(`1000`);
+        this.element.inVoiceNumberClosedOrder().clear();
+        this.element.inVoiceNumberClosedOrder().type(`PO 2222`);
+        cy.wait(1000);
+        this.element.saveBtnFR().click();
+        cy.wait(3000);
+        this.element.searchOrderFinalReview().clear();
+        cy.wait(3000);
+        this.element.searchOrderFinalReview().type('PO 2222');
+        cy.wait(3000);
+        this.element.clickItem().click();
+        cy.wait(3000);
+        this.element.deleteOrder().click();
+        cy.wait(1000);
+        this.element.orderDeleteReason().click();
+        this.element.orderDeleteReasonText().click().type('This is the order customer asked me to delete');
+        cy.wait(3000);
+        this.element.orderDelete().click();
+        cy.wait(3000);
+        this.element.clickItem().should('not.be.visible');
+
+        /* this.element.searchOrderFinalReview().clear();
+        cy.wait('1000');
+        this.element.searchOrderFinalReview().type('PO 1');
+        cy.wait(3000);
+        console.log(`2000`); */
+        
+        /* this.element.inVoiceNumberClosedOrder().clear();
+        cy.wait(1000);
+        console.log(`1000`)
+        this.element.inVoiceNumberClosedOrder().type(`PO 2222`);
+        cy.wait(1000);
+        this.element.saveBtnFR().click();
+        cy.wait(1000);
+        this.element.searchOrderFinalReview().clear();
+        cy.wait(1000);
+        this.element.searchOrderFinalReview().type('PO 2222');
+        cy.wait(3000);
+        this.element.selectFinalReviewOrder().click();
+        cy.wait(1000);
+        this.element.deleteInvoice().click(); */
     }
 
     placeNewOrder(vendor) {
@@ -348,7 +418,7 @@ class orderPage {
         this.element.selectDDItem().click();
         this.element.addQuantityPlaceOrder().type("89");
         this.element.sendBtn().click();
-        this.element.confirmSend().click();
+        this.element.confirmSend().should('be.visible').click();
     }
 
     irProcessWithTenantCheck(unitName, invoiceNumberStr, customerNameStr) {

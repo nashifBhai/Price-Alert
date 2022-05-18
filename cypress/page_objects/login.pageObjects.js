@@ -64,7 +64,7 @@ class loginPage {
         this.element.storeToggle().click();
         this.element.search().type(tenant);
         this.element.selectTenant().click();
-        cy.wait(2000);
+        cy.wait(10000);
     }
 }
 module.exports = new loginPage();

@@ -15,7 +15,7 @@ const recipeSetupPage = require("../../page_objects/recipeSetup.page");
 const priceAlertPageObj = require("../../page_objects/priceAlert.page");
 const headerPageObj = require("../../page_objects/header.pageObj");
 
-const urlToHit = "https://me-15246.marginedge.com/#/";
+const urlToHit = "https://me-16624.marginedge.com/#/";
 
 console.log("Running against: " + urlToHit);
 
@@ -26,7 +26,6 @@ beforeEach(() => {
     console.log("here1");
     loginPageObjs.loginAs(usernames.adminUN, creds.password);
     console.log("here1000");
-
     cy.wait(10000);
 
 });
@@ -76,7 +75,7 @@ describe('Price Alert', () => {
         console.log("here4");
 
     });
-   it.only("Place New Order", () => {
+   it("Place New Order", () => {
        
         console.log("here22");
         hamburgerMenuPageObj.goToOrders();
@@ -90,6 +89,24 @@ describe('Price Alert', () => {
         console.log("here253");
         orderPage.reconcialltionProcess();
         orderPage.finalReview();
+
+    });
+    it.only("POC", () => {
+        cy.wait(5000);
+        console.log("here22");
+        loginPageObjs.chooseTenant(testData.tenantName);
+        hamburgerMenuPageObj.goToOrders();
+        console.log("here23");
+        orderPage.viewOrder();
+        orderPage.attachInvoice();
+        cy.wait(1000);
+        orderPage.endPreProcessing();
+        console.log("here243");
+        orderPage.initialReview();
+        console.log("here253");
+        orderPage.reconcialltionProcess();
+        console.log("tg 11.11");
+        orderPage.finalReviewProcessOrder();
 
     });
     /* it("Order",()=>{
