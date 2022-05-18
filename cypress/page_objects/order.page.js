@@ -51,7 +51,7 @@ class orderPage {
         statusSent: () => cy.xpath(`//*[@ng-click="changeViewBy($event, 'SENT')"]`),
         statusSaved: () => cy.get(`[ng-click="changeViewBy($event, 'SAVED')"]`),
         approveInvoiceItem: () => cy.xpath(`//*[@href="#/invoiceApproval"]//*[@role='button']`),
-        deleteOrder: () => cy.get(`[ng-click="delete()"]`),
+        deleteOrder: () => cy.xpath(`//button[@ng-click='delete()']`),
         deleteConfirm: () => cy.xpath(`//*[@class='btn btn-danger']`),
         saveOrderBtn: () => cy.xpath(`//span[text()='Save']`),
         statusClosed: () => cy.get(`[ng-click="changeViewBy($event, 'CLOSED')"]`),
@@ -151,7 +151,35 @@ class orderPage {
         cy.wait(2000);
         this.element.clickItem().click();
     }
+    searchOrderFR() {
+        cy.wait(5000);
+        this.element.clickItem().click();
+    }
 
+    editInvoiceNumber(){
+        cy.wait(3000);
+        this.element.inVoiceNumberClosedOrder().clear();
+        this.element.inVoiceNumberClosedOrder().type('invoiceNumber1111');
+    }
+    saveInvoiceNumber(){
+        this.element.saveBtnFR().should('be.visible').click();
+    }
+    deleteInvoice(){
+        cy.wait(3000);
+        this.element.deleteOrder().should('be.visible');
+        cy.wait(3000);
+        this.element.deleteOrder().click();
+        cy.wait(3000);
+        this.element.orderDeleteReason().click();
+        this.element.orderDeleteReasonText().click().type('This is the order customer asked me to delete');
+        cy.wait(3000);
+        this.element.orderDelete().click();
+        cy.wait(3000);
+    }
+    orderNotExist(){
+        this.element.searchOrderFinalReview().type('invoiceNumber1111');
+        this.element.clickItem().should('not.exist');
+    }
     viewOrder() {
         this.element.viewAllOrder().should("exist");
     }

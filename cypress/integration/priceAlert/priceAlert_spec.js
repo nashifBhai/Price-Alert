@@ -91,7 +91,7 @@ describe('Price Alert', () => {
         orderPage.finalReview();
 
     });
-    it.only("POC", () => {
+    it("POC", () => {
         cy.wait(5000);
         console.log("here22");
         loginPageObjs.chooseTenant(testData.tenantName);
@@ -108,6 +108,23 @@ describe('Price Alert', () => {
         console.log("tg 11.11");
         orderPage.finalReviewProcessOrder();
 
+    });
+    it.only("Login as Admin, Complete IR, Recon and Close the order with Negative Credit", () => {
+        console.log("here5000");
+        loginPageObjs.loginAs(creds.adminName, creds.password);
+        utilObj.checkRestUnit(createRestName, createRestName);
+        //go to order
+        hamburgerMenuPageObj.goToOrders();
+        //complete the IR
+        orderPageObj.searchOrderFR(invoiceNumberStr);
+        orderPageObj.irProcessWithTenantCheckAdmin(createRestName, "Credit");
+        //complete the reconcillations
+        orderPageObj.searchOrder("Credit");
+        orderPageObj.ReconcialltionProcessWithTenantCheckAdmin(createRestName, invoiceNumberStr3);
+        //close the order
+        cy.wait(3000);
+        orderPageObj.searchOrder(invoiceNumberStr3);
+        orderPageObj.closeOrderCredit();
     });
     /* it("Order",()=>{
         //Choose Tenant
